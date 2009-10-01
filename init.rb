@@ -16,4 +16,9 @@ Redmine::Plugin.register :redmine_integrate_with_chiara_pear_server_plugin do
   author 'Kousuke Ebihara'
   description 'This is a plugin for Redmine'
   version '0.0.1'
+
+  project_module :pear_channel_server do
+    permission :pear_package, { :pear_package => [:add] }, :public => true
+  end
+  menu :project_menu, :pear_package, { :controller => 'pear_package', :action => 'add'}, :caption => 'プラグイン登録', :last => true, :param => :project_id
 end

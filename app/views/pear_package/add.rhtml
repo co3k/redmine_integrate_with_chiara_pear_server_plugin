@@ -1,0 +1,24 @@
+<h2>プラグイン登録</h2>
+
+<% form_tag({}, :class => "tabular") do %>
+<div class="box">
+
+<%= hidden_field_tag 'project_id',params[:project_id] %>
+
+<p>※プラグインがチャンネルサーバに登録されている場合、このサイトとの紐付けがおこなわれます。存在しないプラグインの場合、新しく作成されます。</p>
+
+<p><label for="plugin_name">プラグイン名</label><span class="required"> *</span>
+<%= text_field_tag 'plugin[name]', '', :size => 25 %></p>
+
+<p><label for="plugin_license">ライセンス</label><span class="required"></span>
+<%= text_field_tag 'plugin[license]', '', :size => 25 %></p>
+
+<p><label for="plugin_summary">プラグインの概要</label><span class="required"></span>
+<%= text_field_tag 'plugin[summary]', '', :size => 60 %></p>
+
+<p><label for="plugin_description">プラグインの説明</label><span class="required"></span>
+<%= text_area_tag 'plugin[description]', '', :cols => "50", :rows => '10' %></p>
+</div>
+<%= submit_tag l(:button_apply) %>
+<% end %>
+
