@@ -1,0 +1,17 @@
+<h2>プラグインチャンネルサーバ設定</h2>
+
+<%= error_messages_for 'user_preference', :object => @user.pref %>
+
+<% form_tag({}, :class => "tabular") do %>
+<div class="box">
+<p><label for="channnel_server_user">ユーザ名</label>
+<%= text_field_tag 'pref[channnel_server_user]', @user.pref.channnel_server_user, :size => 25 %></p>
+
+<p><label for="channnel_server_password">パスワード</label>
+<%= password_field_tag 'pref[channnel_server_password]', nil, :size => 25 %></p>
+
+<p>※ユーザが登録されていない場合、新しくアカウントが作られます</p>
+</div>
+<%= submit_tag l(:button_apply) %>
+<% end %>
+
