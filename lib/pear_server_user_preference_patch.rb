@@ -44,7 +44,6 @@ module PearServerUserPreferencePatch
 
         if !authenticate then
           errors.add_to_base '認証に失敗しました'
-          errors.add_to_base Net::HTTP.get('plugins.openpne.jp', '/rest.php/user?user='+username)
           return
         end
       else
