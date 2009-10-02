@@ -11,7 +11,7 @@ class PearPackageController < ApplicationController
     if request.post?
       info = params[:plugin]
 
-      http = Net::HTTP.new('dev.plugins.ebimayo.deb')
+      http = Net::HTTP.new('plugins.openpne.jp')
       response = http.post('/rest.php/authenticate', 'user='+username+'&password='+password)
       authenticate = ActiveSupport::JSON.decode(response.body)
 
@@ -27,9 +27,9 @@ class PearPackageController < ApplicationController
         return
       end
 
-      package = ActiveSupport::JSON.decode(Net::HTTP.get('dev.plugins.ebimayo.deb', '/rest.php/package?user='+username+'&password='+password+'&package='+info[:name]))
+      package = ActiveSupport::JSON.decode(Net::HTTP.get('plugins.openpne.jp', '/rest.php/package?user='+username+'&password='+password+'&package='+info[:name]))
       if package then
-        is_lead = ActiveSupport::JSON.decode(Net::HTTP.get('dev.plugins.ebimayo.deb', '/rest.php/isPackageLead?user='+username+'&password='+password+'&package='+info[:name]))
+        is_lead = ActiveSupport::JSON.decode(Net::HTTP.get('plugins.openpne.jp', '/rest.php/isPackageLead?user='+username+'&password='+password+'&package='+info[:name]))
         if !is_lead then
           flash[:error] = "lead ではないため、プラグインの紐付けがおこなえませんでした。"
           redirect_to :action => 'add', :project_id => params[:project_id]
@@ -42,7 +42,7 @@ class PearPackageController < ApplicationController
           return
         end
 
-        http = Net::HTTP.new('dev.plugins.ebimayo.deb')
+        http = Net::HTTP.new('plugins.openpne.jp')
         response = http.post('/rest.php/package', 'user='+username+'&password='+password+'&package='+info[:name]+'&license='+info[:license]+'&summary='+info[:summary]+'&description='+info[:description])
 
       end

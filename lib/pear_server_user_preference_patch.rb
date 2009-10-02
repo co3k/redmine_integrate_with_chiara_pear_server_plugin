@@ -35,16 +35,16 @@ module PearServerUserPreferencePatch
       username = self.channnel_server_user
       password = self.channnel_server_password
 
-      userinfo = ActiveSupport::JSON.decode(Net::HTTP.get('dev.plugins.ebimayo.deb', '/rest.php/user?user='+username))
+      userinfo = ActiveSupport::JSON.decode(Net::HTTP.get('plugins.openpne.jp', '/rest.php/user?user='+username))
       if userinfo then
         # try to login
-        http = Net::HTTP.new('dev.plugins.ebimayo.deb')
+        http = Net::HTTP.new('plugins.openpne.jp')
         response = http.post('/rest.php/authenticate', 'user='+username+'&password='+password)
         authenticate = ActiveSupport::JSON.decode(response.body)
 
         if !authenticate then
           errors.add_to_base '認証に失敗しました'
-          errors.add_to_base Net::HTTP.get('dev.plugins.ebimayo.deb', '/rest.php/user?user='+username)
+          errors.add_to_base Net::HTTP.get('plugins.openpne.jp', '/rest.php/user?user='+username)
           return
         end
       else
@@ -52,7 +52,7 @@ module PearServerUserPreferencePatch
           errors.add_to_base 'パスワードを入力してください'
         end
 
-        http = Net::HTTP.new('dev.plugins.ebimayo.deb')
+        http = Net::HTTP.new('plugins.openpne.jp')
         http.post('/rest.php/user', 'user='+username+'&password='+password+'&name='+self.user.firstname+' '+self.user.lastname+'&email='+self.user.mail)
       end
     end
