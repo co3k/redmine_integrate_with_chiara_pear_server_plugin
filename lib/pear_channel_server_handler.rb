@@ -29,8 +29,17 @@ class PearChannelServerHandler
     return ActiveSupport::JSON.decode(response.body)
   end
 
+  def get_users()
+    response = @http.get(@entry_point+'/users?'+@token_param)
+    return ActiveSupport::JSON.decode(response.body)
+  end
+
   def add_user(username, password, name, email)
     @http.post(@entry_point+'/user', 'user='+username+'&password='+password+'&name='+name+'&email='+email)
+  end
+
+  def delete_user(username)
+    @http.delete(@entry_point+'/user?'+@token_param+'&username='+username)
   end
 
   def get_package(package)

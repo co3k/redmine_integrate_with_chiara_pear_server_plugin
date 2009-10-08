@@ -19,6 +19,8 @@ Redmine::Plugin.register :redmine_integrate_with_chiara_pear_server_plugin do
 
   project_module :pear_channel_server do
     permission :pear_package, { :pear_package => [:add] }, :public => true
+    permission :pear_admin, { :pear_admin => [:index, :user] }, :public => true
   end
   menu :project_menu, :pear_package, { :controller => 'pear_package', :action => 'add'}, :caption => 'プラグイン登録', :last => true, :param => :project_id, :if => Proc.new {User.current.logged?}
+  menu :project_menu, :pear_admin, { :controller => 'pear_admin', :action => 'index'}, :caption => 'プラグイン管理', :last => true, :param => :project_id, :if => Proc.new {User.current.admin?}
 end

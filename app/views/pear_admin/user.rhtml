@@ -1,0 +1,27 @@
+<h2>プラグイン管理</h2>
+<h3>ユーザ管理</h3>
+
+<table><tr>
+<th>name</th>
+<th>handle</th>
+<th>description</th>
+<th>email</th>
+<th>operation</th>
+</tr>
+
+<% for user in @users %>
+<tr>
+<td><%= user['name'] %></td>
+<td><%= user['handle'] %></td>
+<td><%= user['description'] %></td>
+<td><%= user['email'] %></td>
+<td>
+<% form_tag({}, :class => "tabular") do %>
+<%= hidden_field_tag 'handle',user['handle'] %>
+<%= hidden_field_tag 'project_id',params[:project_id] %>
+<%= submit_tag l(:button_delete) %>
+<% end %>
+</td>
+</tr>
+<% end %>
+</table>
