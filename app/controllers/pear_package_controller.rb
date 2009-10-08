@@ -2,6 +2,7 @@ require 'activesupport'
 
 class PearPackageController < ApplicationController
   unloadable
+  before_filter :require_login
 
   def add
     @project = Project.find(params[:project_id])
