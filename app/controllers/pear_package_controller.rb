@@ -44,15 +44,12 @@ class PearPackageController < ApplicationController
 
         http = Net::HTTP.new('plugins.openpne.jp')
         response = http.post('/rest.php/package', 'user='+username+'&password='+password+'&package='+info[:name]+'&license='+info[:license]+'&summary='+info[:summary]+'&description='+info[:description])
-
       end
-
-
 
       @plugin_project = Project.new({
         "name" => info[:name],
         "description" => info[:description],
-        "identifier" => info[:name][2 .. -7].underscore.gsub(/_/, '-'),
+        "identifier" => 'plg-'+info[:name][2 .. -7].underscore.gsub(/_/, '-'),
         "parent_id" => params[:parent_id]
       });
       @plugin_project.enabled_module_names = ['repository', 'issue_tracking']
