@@ -1,4 +1,5 @@
 require 'activesupport'
+require 'pear_channel_server_handler'
 
 class PearPackageController < ApplicationController
   unloadable
@@ -12,11 +13,8 @@ class PearPackageController < ApplicationController
     if request.post?
       info = params[:plugin]
 
-      http = Net::HTTP.new('plugins.openpne.jp')
-      response = http.post('/rest.php/authenticate', 'user='+username+'&password='+password)
-      authenticate = ActiveSupport::JSON.decode(response.body)
-
-      if !authenticate then
+      handler = PearChannelServerHandler.new()
+      if !handler.login(username, password) then
         flash[:error] = "プラグインチャンネルサーバとの通信に失敗しました。アカウント画面から、チャンネルサーバのユーザ名とパスワードの設定をおこなってからもう一度やりなおしてください。"
         redirect_to :action => 'add', :project_id => params[:project_id]
         return
@@ -28,10 +26,9 @@ class PearPackageController < ApplicationController
         return
       end
 
-      package = ActiveSupport::JSON.decode(Net::HTTP.get('plugins.openpne.jp', '/rest.php/package?user='+username+'&password='+password+'&package='+info[:name]))
+      package = handler.get_package(info[:name])
       if package then
-        is_lead = ActiveSupport::JSON.decode(Net::HTTP.get('plugins.openpne.jp', '/rest.php/isPackageLead?user='+username+'&password='+password+'&package='+info[:name]))
-        if !is_lead then
+        if !handler.is_package_lead(info[:name]) then
           flash[:error] = "lead ではないため、プラグインの紐付けがおこなえませんでした。"
           redirect_to :action => 'add', :project_id => params[:project_id]
           return
@@ -43,8 +40,7 @@ class PearPackageController < ApplicationController
           return
         end
 
-        http = Net::HTTP.new('plugins.openpne.jp')
-        response = http.post('/rest.php/package', 'user='+username+'&password='+password+'&package='+info[:name]+'&license='+info[:license]+'&summary='+info[:summary]+'&description='+info[:description])
+        handler.add_package(info[:name], info[:license], info[:summary], info[:description])
       end
 
       @plugin_project = Project.new({

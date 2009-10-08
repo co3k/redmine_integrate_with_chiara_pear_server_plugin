@@ -1,8 +1,5 @@
 require 'digest/md5'
-require 'net/http'
-require 'activesupport'
-
-Net::HTTP.version_1_2
+require 'pear_channel_server_handler'
 
 module PearServerUserPreferencePatch
 
@@ -32,17 +29,13 @@ module PearServerUserPreferencePatch
     end
 
     def validate
+      handler = PearChannelServerHandler.new()
+
       username = self.channnel_server_user
       password = self.channnel_server_password
 
-      userinfo = ActiveSupport::JSON.decode(Net::HTTP.get('plugins.openpne.jp', '/rest.php/user?user='+username))
-      if userinfo then
-        # try to login
-        http = Net::HTTP.new('plugins.openpne.jp')
-        response = http.post('/rest.php/authenticate', 'user='+username+'&password='+password)
-        authenticate = ActiveSupport::JSON.decode(response.body)
-
-        if !authenticate then
+      if handler.get_user(username) then
+        if !handler.login(username, password) then
           errors.add_to_base '認証に失敗しました'
           return
         end
@@ -51,8 +44,7 @@ module PearServerUserPreferencePatch
           errors.add_to_base 'パスワードを入力してください'
         end
 
-        http = Net::HTTP.new('plugins.openpne.jp')
-        http.post('/rest.php/user', 'user='+username+'&password='+password+'&name='+self.user.firstname+' '+self.user.lastname+'&email='+self.user.mail)
+        handler.add_user(username, password, self.user.firstname+' '+self.user.lastname, self.user.mail)
       end
     end
   end
