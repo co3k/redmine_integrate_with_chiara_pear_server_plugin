@@ -16,8 +16,6 @@ class PearChannelServerHandler
     param = 'user='+username+'&password='+password
     response = @http.post(@entry_point+'/authenticate', param)
     token = ActiveSupport::JSON.decode(response.body)
-
-    RAILS_DEFAULT_LOGGER.debug "token = #{token}"
     if token then
       @token_param = 'TOKEN='+token
       return true
