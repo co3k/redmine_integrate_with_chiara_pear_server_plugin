@@ -34,6 +34,10 @@ module PearServerUserPreferencePatch
       username = self.channnel_server_user
       password = self.channnel_server_password
 
+      if !username && !password then
+        return
+      end
+
       if handler.get_user(username) then
         if !handler.login(username, password) then
           errors.add_to_base '認証に失敗しました'
